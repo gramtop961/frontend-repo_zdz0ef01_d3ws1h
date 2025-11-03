@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProductShowcase from './components/ProductShowcase';
-import DashboardSnapshot from './components/DashboardSnapshot';
+import AdminPanel from './components/AdminPanel';
 
 function Footer() {
   return (
@@ -18,14 +19,70 @@ function Footer() {
   );
 }
 
+const initialProducts = [
+  {
+    id: 1,
+    name: 'Tulsi Almond Crunch',
+    price: 6.99,
+    description: 'Calming tulsi with roasted almonds for sustained energy.',
+    tags: ['vegan', 'gluten-free'],
+    nutrition: { calories: 140, protein: '5g', fiber: '4g', sugar: '3g' }
+  },
+  {
+    id: 2,
+    name: 'Ashwagandha Choco Bites',
+    price: 7.49,
+    description: 'Adaptogenic boost with rich cacao and coconut sugar.',
+    tags: ['vegan'],
+    nutrition: { calories: 150, protein: '6g', fiber: '5g', sugar: '4g' }
+  },
+  {
+    id: 3,
+    name: 'Ginger Sesame Thins',
+    price: 5.99,
+    description: 'Zesty ginger with crunchy sesame for a metabolism lift.',
+    tags: ['gluten-free'],
+    nutrition: { calories: 120, protein: '4g', fiber: '3g', sugar: '2g' }
+  }
+];
+
 export default function App() {
+  const [products, setProducts] = useState(initialProducts);
+
+  const updateProduct = (id, patch) => {
+    setProducts((prev) => prev.map((p) => (p.id === id ? { ...p, ...patch } : p)));
+  };
+
+  const addProduct = ({ name, price, description }) => {
+    setProducts((prev) => [
+      ...prev,
+      {
+        id: prev.length ? Math.max(...prev.map((p) => p.id)) + 1 : 1,
+        name,
+        price,
+        description,
+        tags: ['vegan'],
+        nutrition: { calories: 130, protein: '5g', fiber: '4g', sugar: '3g' }
+      }
+    ]);
+  };
+
+  const deleteProduct = (id) => {
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  };
+
   return (
     <div className="min-h-screen bg-white dark:bg-neutral-950">
       <Navbar />
       <main>
         <Hero />
-        <ProductShowcase />
-        <DashboardSnapshot />
+        <ProductShowcase products={products} onAddToCart={() => {}} />
+        <AdminPanel
+          products={products}
+          onUpdateProduct={updateProduct}
+          onAddProduct={addProduct}
+          onDeleteProduct={deleteProduct}
+        />
       </main>
       <Footer />
     </div>
