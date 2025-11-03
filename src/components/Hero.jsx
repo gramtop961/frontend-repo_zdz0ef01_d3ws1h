@@ -1,70 +1,62 @@
 import { motion } from 'framer-motion';
-import { Cookie, Dumbbell, Trophy } from 'lucide-react';
 
 export default function Hero() {
   return (
     <section className="relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-amber-50 to-white dark:from-neutral-900 dark:via-neutral-900 dark:to-neutral-900 pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 dark:border-emerald-900 bg-white dark:bg-neutral-900 px-3 py-1 text-xs text-emerald-700 dark:text-emerald-300 shadow-sm">
-            <Cookie className="w-4 h-4" /> Ayurvedic Healthy Cookies + Fitness
-          </span>
-          <h1 className="mt-4 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-white">
-            Earn cookies while burning calories!
-          </h1>
-          <p className="mt-4 max-w-2xl mx-auto text-neutral-600 dark:text-neutral-300">
-            Shop nutrient-rich AyurBakes and turn your daily movement into cookie points. Redeem for discounts, gifts, and bragging rights on the leaderboard.
-          </p>
-          <div className="mt-8 flex items-center justify-center gap-3">
-            <a href="#shop" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-emerald-600 text-white hover:bg-emerald-500 transition shadow">
-              <Cookie className="w-5 h-5" /> Shop Healthy Cookies
-            </a>
-            <a href="#dashboard" className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-700 transition">
-              <Dumbbell className="w-5 h-5" /> Track & Earn Points
-            </a>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4"
-        >
-          {[
-            {
-              icon: <Cookie className="w-5 h-5 text-emerald-600" />,
-              title: 'Clean Ingredients',
-              desc: 'Vegan, gluten-free, Ayurvedic herbs for balance and energy.'
-            },
-            {
-              icon: <Dumbbell className="w-5 h-5 text-emerald-600" />,
-              title: 'Move to Earn',
-              desc: '1000 steps = 1 cookie point. Runs and workouts earn more.'
-            },
-            {
-              icon: <Trophy className="w-5 h-5 text-emerald-600" />,
-              title: 'Challenge Friends',
-              desc: 'Beat nearby users on weekly leaderboards and win rewards.'
-            }
-          ].map((f, i) => (
-            <div key={i} className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-4 sm:p-5 shadow-sm">
-              <div className="flex items-start gap-3">
-                <div className="p-2 rounded-md bg-emerald-50 dark:bg-emerald-900/20">{f.icon}</div>
-                <div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">{f.title}</h3>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-300">{f.desc}</p>
-                </div>
-              </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 via-white to-transparent dark:from-emerald-900/20 dark:via-neutral-900 dark:to-neutral-900 pointer-events-none" />
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
+          <div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl font-extrabold tracking-tight"
+            >
+              Healthy cookies that fuel your fitness
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="mt-4 text-lg text-neutral-600 dark:text-neutral-300"
+            >
+              Nirla AyurBakes Fit blends Ayurvedic goodness with macro-balanced nutrition. Snack smarter and level up your health.
+            </motion.p>
+            <div className="mt-6 flex gap-3">
+              <a href="#shop" className="px-5 py-3 rounded-md text-white bg-emerald-600 hover:bg-emerald-700 font-medium">Shop cookies</a>
+              <a href="#admin" className="px-5 py-3 rounded-md border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 font-medium">Admin</a>
             </div>
-          ))}
-        </motion.div>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="relative h-64 sm:h-80 md:h-full"
+          >
+            <div className="absolute right-0 top-0 h-64 w-64 sm:h-80 sm:w-80 rounded-3xl bg-gradient-to-br from-emerald-400/30 to-teal-500/30 blur-2xl" />
+            <div className="relative z-10 rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6 bg-white/70 dark:bg-neutral-900/70 backdrop-blur">
+              <ul className="grid grid-cols-2 gap-4 text-sm">
+                <li className="p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
+                  <div className="text-2xl font-bold">5g</div>
+                  <div className="text-neutral-500">Protein</div>
+                </li>
+                <li className="p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
+                  <div className="text-2xl font-bold">2g</div>
+                  <div className="text-neutral-500">Sugar</div>
+                </li>
+                <li className="p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
+                  <div className="text-2xl font-bold">120</div>
+                  <div className="text-neutral-500">Calories</div>
+                </li>
+                <li className="p-3 rounded-lg bg-neutral-50 dark:bg-neutral-800">
+                  <div className="text-2xl font-bold">Ayur</div>
+                  <div className="text-neutral-500">Herbs</div>
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

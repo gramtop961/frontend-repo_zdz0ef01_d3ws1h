@@ -1,49 +1,121 @@
-import { useEffect, useState } from 'react';
-import { Cookie, Dumbbell, Trophy, ShoppingCart, Sun, Moon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { ShoppingCart, Sun, Moon, LogIn, LogOut, User } from 'lucide-react';
 
-export default function Navbar() {
-  const [dark, setDark] = useState(false);
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ');
+}
 
-  useEffect(() => {
-    const isDark = localStorage.getItem('theme') === 'dark';
-    setDark(isDark);
-    document.documentElement.classList.toggle('dark', isDark);
-  }, []);
+export default function Navbar({ cartCount = 0, user, onLogin, onLogout, theme, onToggleTheme }) {
+  const [openAuth, setOpenAuth] = useState(false);
+  const [email, setEmail] = useState('');
 
-  const toggleTheme = () => {
-    const next = !dark;
-    setDark(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('theme', next ? 'dark' : 'light');
+  const isAuthed = !!user;
+  const initials = useMemo(() => (user?.email ? user.email[0].toUpperCase() : 'N'), [user]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (email.trim()) {
+      onLogin(email.trim());
+      setEmail('');
+      setOpenAuth(false);
+    }
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-900/60 bg-white/80 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-semibold text-neutral-900 dark:text-white">
-          <div className="p-2 rounded-lg bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300">
-            <Cookie className="w-5 h-5" />
+    <header className="sticky top-0 z-50 bg-white/70 dark:bg-neutral-900/70 backdrop-blur border-b border-neutral-200 dark:border-neutral-800">
+      <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white font-bold">
+              N
+            </div>
+            <span className="font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
+              Nirla AyurBakes Fit
+            </span>
           </div>
-          <span className="tracking-tight">Nirla AyurBakes Fit</span>
-        </div>
-        <div className="hidden md:flex items-center gap-6 text-sm">
-          <a href="#shop" className="text-neutral-600 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition">Shop</a>
-          <a href="#dashboard" className="text-neutral-600 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1">
-            <Dumbbell className="w-4 h-4" /> Dashboard
-          </a>
-          <a href="#leaderboard" className="text-neutral-600 dark:text-neutral-300 hover:text-emerald-600 dark:hover:text-emerald-400 transition flex items-center gap-1">
-            <Trophy className="w-4 h-4" /> Leaderboard
-          </a>
-        </div>
-        <div className="flex items-center gap-3">
-          <button aria-label="Toggle theme" onClick={toggleTheme} className="p-2 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition">
-            {dark ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-indigo-500" />}
-          </button>
-          <button className="relative inline-flex items-center gap-2 px-3 py-2 rounded-md bg-emerald-600 text-white hover:bg-emerald-500 transition">
-            <ShoppingCart className="w-4 h-4" />
-            <span className="hidden sm:inline">Cart</span>
-            <span className="absolute -top-1 -right-1 text-[10px] bg-white text-emerald-700 dark:bg-neutral-900 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900 rounded-full px-1.5 py-0.5">2</span>
-          </button>
+
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#shop" className="hover:text-emerald-600 dark:hover:text-emerald-400">Shop</a>
+            <a href="#about" className="hover:text-emerald-600 dark:hover:text-emerald-400">About</a>
+            <a href="#contact" className="hover:text-emerald-600 dark:hover:text-emerald-400">Contact</a>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              aria-label="Toggle theme"
+              onClick={onToggleTheme}
+              className="p-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            >
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+
+            <div className="relative">
+              <button className="p-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 relative">
+                <ShoppingCart size={18} />
+                {cartCount > 0 && (
+                  <span className="absolute -top-1 -right-1 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-600 text-white">
+                    {cartCount}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {!isAuthed ? (
+              <div className="relative">
+                <button
+                  onClick={() => setOpenAuth((v) => !v)}
+                  className="inline-flex items-center gap-1 px-3 py-2 rounded-md bg-emerald-600 text-white text-sm hover:bg-emerald-700"
+                >
+                  <LogIn size={16} /> Sign in
+                </button>
+                {openAuth && (
+                  <div className="absolute right-0 mt-2 w-72 p-4 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-lg">
+                    <h3 className="text-sm font-medium mb-2">Sign in with email</h3>
+                    <form onSubmit={handleSubmit} className="space-y-2">
+                      <input
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full px-3 py-2 rounded-md border border-neutral-300 dark:border-neutral-700 bg-transparent outline-none focus:ring-2 focus:ring-emerald-500"
+                        required
+                      />
+                      <button
+                        type="submit"
+                        className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-emerald-600 text-white text-sm hover:bg-emerald-700"
+                      >
+                        <LogIn size={16} /> Continue
+                      </button>
+                      <p className="text-[12px] text-neutral-500">Basic demo sign-in. No password. Email defines your role.</p>
+                    </form>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="relative">
+                <button onClick={() => setOpenAuth((v) => !v)} className="flex items-center gap-2 px-3 py-2 rounded-md border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800">
+                  <div className="h-6 w-6 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">
+                    {initials}
+                  </div>
+                  <span className="hidden sm:block text-sm">{user.email}</span>
+                </button>
+                {openAuth && (
+                  <div className="absolute right-0 mt-2 w-64 p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-lg">
+                    <div className="text-sm mb-2 flex items-center gap-2">
+                      <User size={14} />
+                      <div className="flex-1">
+                        <div className="font-medium">{user.role === 'admin' ? 'Admin' : 'User'}</div>
+                        <div className="text-neutral-500 truncate">{user.email}</div>
+                      </div>
+                    </div>
+                    <button onClick={() => { onLogout(); setOpenAuth(false); }} className="w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-sm">
+                      <LogOut size={16} /> Sign out
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </header>
